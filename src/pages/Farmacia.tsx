@@ -13,7 +13,6 @@ export default function Farmacia() {
 
       <h2 className="seccion-titulo">En preparación</h2>
       <ul className="proximamente">
-        <li><strong>Ficha por secciones</strong> 4.1 a 5.2 de la ficha técnica, con el texto oficial.</li>
         <li><strong>Árbol ATC</strong> para navegar por familias.</li>
         <li><strong>Alertas</strong> de seguridad y problemas de suministro de la AEMPS.</li>
         <li><strong>Favoritos e historial</strong>, guardados solo en este dispositivo.</li>

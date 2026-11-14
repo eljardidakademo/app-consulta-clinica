@@ -7,6 +7,7 @@ import Anatomia from './pages/Anatomia';
 import Imagen from './pages/Imagen';
 import Buscar from './pages/Buscar';
 import Acerca from './pages/Acerca';
+import FichaMedicamento from './pages/FichaMedicamento';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/farmacia" replace />} />
           <Route path="/farmacia" element={<Farmacia />} />
+          <Route path="/farmacia/medicamento/:nregistro" element={<FichaMedicamento />} />
           <Route path="/anatomia" element={<Anatomia />} />
           <Route path="/imagen" element={<Imagen />} />
           <Route path="/buscar" element={<Buscar />} />
