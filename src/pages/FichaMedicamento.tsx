@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
-  fechaCorta, formatearFecha, obtenerIndice, obtenerMedicamento, obtenerNotas, urlFichaCima,
+  fechaCorta, formatearFecha, obtenerIndice, obtenerMedicamento, obtenerNotas, urlEpar, URL_EMA_MEDICAMENTOS, urlFichaCima,
   type MedicamentoDetalle, type NotaSeguridad,
 } from '../lib/cima';
 import Mazo, { type Apartado } from '../components/Mazo';
@@ -266,7 +266,14 @@ function Contenido({ m, notas, version, consultado, actualizar }: {
         {ft && <a className="boton-enlace" href={ft.url} target="_blank" rel="noreferrer">Ficha técnica (PDF)</a>}
         {prospecto && <a className="boton-enlace" href={prospecto.url} target="_blank" rel="noreferrer">Prospecto (PDF)</a>}
         <a className="boton-enlace" href={urlFichaCima(m.nregistro)} target="_blank" rel="noreferrer">Ver en CIMA</a>
+        {m.ema && <a className="boton-enlace" href={urlEpar(m.nombre)} target="_blank" rel="noreferrer">Ficha en la EMA (EPAR)</a>}
       </div>
+      {m.ema && (
+        <p className="nota">
+          Autorización centralizada europea. El enlace a la EMA se forma con el nombre comercial; si no se abre,
+          búscalo en el <a href={URL_EMA_MEDICAMENTOS} target="_blank" rel="noreferrer">buscador de medicamentos de la EMA</a>.
+        </p>
+      )}
 
       <p className="fuente">
         Fuente: CIMA, Agencia Española de Medicamentos y Productos Sanitarios (AEMPS).{' '}
