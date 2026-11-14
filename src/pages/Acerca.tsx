@@ -33,6 +33,11 @@ export default function Acerca() {
           <strong>Notas de seguridad y problemas de suministro</strong>: CIMA (AEMPS). Cada nota enlaza a su
           publicación en aemps.gob.es.
         </li>
+        <li>
+          <strong>Medicamentos de autorización centralizada</strong>: enlace complementario a su página en la
+          Agencia Europea de Medicamentos (EMA).{' '}
+          <a href="https://www.ema.europa.eu/en/medicines" target="_blank" rel="noreferrer">ema.europa.eu</a>
+        </li>
       </ul>
       <p className="nota">Las fuentes de Anatomía e Imagen se añadirán aquí cuando se incorporen sus contenidos.</p>
 

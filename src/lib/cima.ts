@@ -154,6 +154,32 @@ export function fechaCorta(ms?: number): string {
   return ms ? new Date(ms).toLocaleDateString('es-ES') : '';
 }
 
+/**
+ * Enlace a la página del medicamento (EPAR) en la Agencia Europea de Medicamentos.
+ * CIMA no da este enlace: solo indica (campo "ema") que la autorización es centralizada.
+ * La EMA usa direcciones con el nombre comercial: .../EPAR/ozempic. Se deduce con las
+ * palabras del nombre anteriores a la primera cifra ("APIXABAN ACCORD 2,5 MG" → apixaban-accord).
+ * Comprobado el 14/11/2026: funciona con los nombres comerciales (Ozempic, Keytruda, Humira…),
+ * pero falla con algunos genéricos, que la EMA nombra en inglés (dapagliflozin-viatris).
+ * Por eso la app ofrece también el buscador de la EMA.
+ */
+export function urlEpar(nombre: string): string {
+  const palabras: string[] = [];
+  for (const p of nombre.split(/\s+/)) {
+    if (/\d/.test(p)) break;
+    palabras.push(p);
+  }
+  const slug = palabras
+    .join(' ')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `https://www.ema.europa.eu/en/medicines/human/EPAR/${slug}`;
+}
+export const URL_EMA_MEDICAMENTOS = 'https://www.ema.europa.eu/en/medicines';
+
 /** Enlace a la ficha pública del medicamento en la web oficial de CIMA. */
 export function urlFichaCima(nregistro: string): string {
   return `https://cima.aemps.es/cima/publico/detalle.html?nr=${encodeURIComponent(nregistro)}`;
