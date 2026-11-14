@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Estilos de la app. Los colores y medidas están en variables (tokens) para
+   poder cambiar la identidad visual sin tocar los componentes.
+   Este es un estilo provisional: la identidad definitiva se elegirá aparte.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+  --fondo: #f6f4ef;
+  --superficie: #ffffff;
+  --superficie-2: #eeebe3;
+  --tinta: #14211e;
+  --tinta-suave: #55615d;
+  --borde: #dcd7cc;
+  --marca: #14302b;
+  --acento: #e8a33d;
+
+  /* Color de cada módulo */
+  --farmacia: #1f7a5a;
+  --anatomia: #c4563a;
+  --imagen: #3b5bdb;
+  --buscar: #14302b;
+
+  --humano: #1f7a5a;
+  --alerta: #b4570a;
+  --error: #b42318;
+
+  --radio: 18px;
+  --radio-sm: 10px;
+  --sombra: 0 1px 2px rgb(20 33 30 / 6%), 0 8px 24px rgb(20 33 30 / 8%);
+  --fuente: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --escala: 1; /* tamaño de letra ajustable en el futuro */
+}
+
+/* Modo oscuro: automático según el sistema, salvo que el usuario elija "claro". */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --fondo: #0d1412;
+    --superficie: #151f1c;
+    --superficie-2: #1c2825;
+    --tinta: #e7ece9;
+    --tinta-suave: #9aa8a3;
+    --borde: #2a3834;
+    --marca: #cfe6dc;
+    --farmacia: #4cc49a;
+    --anatomia: #ec8a6f;
+    --imagen: #8ea6ff;
+    --buscar: #cfe6dc;
+    --humano: #4cc49a;
+    --alerta: #f0a35a;
+    --error: #ff8a80;
+    --sombra: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --fondo: #0d1412;
+  --superficie: #151f1c;
+  --superficie-2: #1c2825;
+  --tinta: #e7ece9;
+  --tinta-suave: #9aa8a3;
+  --borde: #2a3834;
+  --marca: #cfe6dc;
+  --farmacia: #4cc49a;
+  --anatomia: #ec8a6f;
+  --imagen: #8ea6ff;
+  --buscar: #cfe6dc;
+  --humano: #4cc49a;
+  --alerta: #f0a35a;
+  --error: #ff8a80;
+  --sombra: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
+}
+
+/* El color activo depende del módulo en el que estamos */
+[data-modulo='farmacia'] { --modulo: var(--farmacia); }
+[data-modulo='anatomia'] { --modulo: var(--anatomia); }
+[data-modulo='imagen'] { --modulo: var(--imagen); }
+[data-modulo='buscar'] { --modulo: var(--buscar); }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--fuente);
+  font-size: calc(16px * var(--escala));
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+
+.app { min-height: 100dvh; display: flex; flex-direction: column; }
+
+/* ---------- Cabecera ---------- */
+.cabecera {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background: color-mix(in srgb, var(--fondo) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borde);
+}
+.marca {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; letter-spacing: -0.01em; text-decoration: none; color: var(--marca);
+}
+.marca-punto {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: conic-gradient(var(--farmacia) 0 33%, var(--anatomia) 0 66%, var(--imagen) 0);
+}
+.cabecera-acciones { display: flex; gap: 4px; }
+.boton-icono {
+  position: relative;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: transparent; color: var(--tinta-suave); cursor: pointer;
+}
+.boton-icono:hover { background: var(--superficie-2); color: var(--tinta); }
+.tema-letra { position: absolute; right: 6px; bottom: 6px; font-size: 10px; font-weight: 700; }
+
+/* ---------- Contenido ---------- */
+.contenido {
+  flex: 1;
+  width: 100%; max-width: 760px; margin: 0 auto;
+  padding: 20px 16px calc(110px + env(safe-area-inset-bottom));
+}
+.pagina-cabecera { margin-bottom: 18px; }
+.pagina-antetitulo {
+  margin: 0 0 4px; font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--modulo);
+}
+h1 {
+  margin: 0; font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.05;
+  letter-spacing: -0.035em; font-weight: 800;
+}
+.pagina-cabecera h1::after {
+  content: ''; display: block; width: 48px; height: 5px; margin-top: 12px;
+  border-radius: 3px; background: var(--modulo);
+}
+.seccion-titulo { margin: 32px 0 10px; font-size: 1.05rem; letter-spacing: -0.01em; }
+.nota { color: var(--tinta-suave); font-size: 0.9rem; }
+.fuente {
+  margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--borde);
+  color: var(--tinta-suave); font-size: 0.8rem;
+}
+.aviso { padding: 12px 14px; border-radius: var(--radio-sm); background: var(--superficie-2); }
+.aviso-error { color: var(--error); }
+
+/* ---------- Buscador ---------- */
+.segmentos {
+  display: flex; gap: 4px; padding: 4px; margin-bottom: 10px;
+  background: var(--superficie-2); border-radius: 999px; overflow-x: auto;
+}
+.segmento {
+  flex: 1; white-space: nowrap; min-height: 40px; padding: 0 12px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--tinta-suave);
+  font-size: 0.9rem; font-weight: 600; cursor: pointer;
+}
+.segmento[aria-checked='true'] { background: var(--superficie); color: var(--modulo); box-shadow: var(--sombra); }
+.campo {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 56px; padding: 0 16px;
+  background: var(--superficie); border: 1.5px solid var(--borde); border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+.campo:focus-within { border-color: var(--modulo); }
+.campo-icono { color: var(--modulo); flex: none; }
+.campo input {
+  flex: 1; min-width: 0; height: 52px; border: 0; outline: 0; background: transparent;
+  color: var(--tinta); font: inherit; font-size: 1.05rem;
+}
+
+.lista-resultados { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.tarjeta-med {
+  display: grid; gap: 4px; padding: 14px 16px; text-decoration: none;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio);
+  border-left: 5px solid var(--modulo);
+}
+.tarjeta-med:hover { border-color: var(--modulo); }
+.med-nombre { font-weight: 700; line-height: 1.3; }
+.med-lab { color: var(--tinta-suave); font-size: 0.88rem; }
+.med-etiquetas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chip {
+  padding: 2px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  background: var(--superficie-2); color: var(--tinta-suave);
+}
+.chip-humano { background: color-mix(in srgb, var(--humano) 16%, transparent); color: var(--humano); }
+.chip-alerta { background: color-mix(in srgb, var(--alerta) 16%, transparent); color: var(--alerta); }
+.chip-apagado { text-decoration: line-through; }
+
+/* ---------- Secciones pendientes y estados vacíos ---------- */
+.proximamente { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.proximamente li {
+  padding: 12px 14px; border-radius: var(--radio-sm);
+  background: var(--superficie-2); color: var(--tinta-suave); font-size: 0.92rem;
+}
+.proximamente strong { color: var(--tinta); }
+.vacio {
+  padding: 28px 20px; text-align: center; border-radius: var(--radio);
+  border: 1.5px dashed color-mix(in srgb, var(--modulo) 45%, var(--borde));
+  color: var(--tinta-suave);
+}
+.vacio-titulo { margin: 0 0 6px; font-weight: 700; color: var(--modulo); font-size: 1.1rem; }
+.lista-fuentes { padding-left: 20px; }
+
+/* ---------- Navegación inferior ---------- */
+.nav-inferior {
+  position: fixed; z-index: 20;
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  width: min(calc(100% - 24px), 480px);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 6px;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 24px;
+  box-shadow: var(--sombra);
+}
+.nav-boton {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: 56px; border-radius: 18px; text-decoration: none;
+  color: var(--tinta-suave); font-size: 0.72rem; font-weight: 600;
+}
+.nav-boton.active { color: var(--modulo); background: color-mix(in srgb, var(--modulo) 13%, transparent); }
+.nav-boton.active svg { stroke-width: 2.2; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-boton, .segmento, .tarjeta-med { transition: background-color 0.15s, color 0.15s, border-color 0.15s; }
+}

@@ -1,0 +1,20 @@
+# Comprueba que la app compila en cada propuesta de cambio (pull request).
+name: Comprobar compilación
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build

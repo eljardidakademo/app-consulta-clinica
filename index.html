@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Consulta clínica rápida: Farmacia, Anatomía e Imagen." />
+    <meta name="theme-color" content="#14302b" />
+    <link rel="icon" type="image/svg+xml" href="/app-consulta-clinica/icon.svg" />
+    <link rel="apple-touch-icon" href="/app-consulta-clinica/apple-touch-icon.png" />
+    <title>Consulta clínica</title>
+    <script>
+      // Aplica el tema guardado antes de pintar la página, para evitar un parpadeo.
+      try {
+        var t = localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') document.documentElement.dataset.theme = t === 'oscuro' ? 'dark' : 'light';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
