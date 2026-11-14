@@ -1,7 +1,8 @@
 // Buscador de medicamentos de uso humano contra CIMA (AEMPS), en tiempo real.
 // Muestra solo lo que devuelve CIMA, con la fuente y la fecha de consulta.
 import { useEffect, useRef, useState } from 'react';
-import { buscarMedicamentos, formatearFecha, urlFichaCima, type ModoBusqueda, type ResultadoBusqueda } from '../lib/cima';
+import { Link, useSearchParams } from 'react-router-dom';
+import { buscarMedicamentos, formatearFecha, type ModoBusqueda, type ResultadoBusqueda } from '../lib/cima';
 import { IconoBuscar } from './Iconos';
 
 const MODOS: { valor: ModoBusqueda; texto: string; ayuda: string }[] = [
@@ -17,8 +18,23 @@ type Estado =
   | { tipo: 'ok'; datos: ResultadoBusqueda };
 
 export default function BuscadorMedicamentos({ autoFocus = false }: { autoFocus?: boolean }) {
-  const [texto, setTexto] = useState('');
-  const [modo, setModo] = useState<ModoBusqueda>('nombre');
+  // La búsqueda se guarda en la dirección (?q=…&modo=…) para que, al volver de una
+  // ficha, los resultados sigan ahí sin tener que buscar de nuevo.
+  const [params, setParams] = useSearchParams();
+  const [texto, setTextoLocal] = useState(params.get('q') ?? '');
+  const modoUrl = params.get('modo');
+  const modo: ModoBusqueda = modoUrl === 'principio' || modoUrl === 'cn' ? modoUrl : 'nombre';
+  const actualizarUrl = (q: string, m: ModoBusqueda) => {
+    const nuevos: Record<string, string> = {};
+    if (q) nuevos.q = q;
+    if (m !== 'nombre') nuevos.modo = m;
+    setParams(nuevos, { replace: true });
+  };
+  const setTexto = (q: string) => {
+    setTextoLocal(q);
+    actualizarUrl(q, modo);
+  };
+  const setModo = (m: ModoBusqueda) => actualizarUrl(texto, m);
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' });
   const controlador = useRef<AbortController | null>(null);
 
@@ -105,7 +121,7 @@ function Resultados({ datos }: { datos: ResultadoBusqueda }) {
       <ul className="lista-resultados">
         {datos.resultados.map((m) => (
           <li key={m.nregistro}>
-            <a className="tarjeta-med" href={urlFichaCima(m.nregistro)} target="_blank" rel="noreferrer">
+            <Link className="tarjeta-med" to={`/farmacia/medicamento/${encodeURIComponent(m.nregistro)}`}>
               <span className="med-nombre">{m.nombre}</span>
               <span className="med-lab">{m.labtitular}</span>
               <span className="med-etiquetas">
@@ -114,13 +130,13 @@ function Resultados({ datos }: { datos: ResultadoBusqueda }) {
                 {m.comerc === false && <span className="chip chip-apagado">No comercializado</span>}
                 {m.psum && <span className="chip chip-alerta">Problema de suministro</span>}
               </span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
       <p className="fuente">
         Fuente: CIMA, Agencia Española de Medicamentos y Productos Sanitarios (AEMPS). Consultado el {formatearFecha(datos.consultadoEl)}.
-        Cada resultado abre la ficha oficial en CIMA.
+        Toca un medicamento para ver su ficha.
       </p>
     </>
   );

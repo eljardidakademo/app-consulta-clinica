@@ -9,7 +9,9 @@ Se puede instalar como una app (PWA) desde el navegador y funciona sin servidor 
 
 - Navegación inferior con los tres módulos (Farmacia, Anatomía, Imagen) y el buscador.
 - Farmacia: buscador de medicamentos de uso humano conectado en tiempo real a CIMA (AEMPS),
-  por nombre, principio activo o código nacional. Cada resultado abre la ficha oficial en CIMA.
+  por nombre, principio activo o código nacional. Al tocar un resultado se abre su ficha dentro de la app:
+  datos de autorización, alertas de seguridad y suministro, secciones 4.1 a 5.2 de la ficha técnica
+  (texto oficial, plegable), prospecto y enlaces a los PDF oficiales. Al volver, la búsqueda sigue ahí.
 - Anatomía e Imagen: vacíos por ahora.
 - Modo claro, oscuro o automático (botón de la cabecera).
 - Página de fuentes y aviso legal (botón ⓘ).
