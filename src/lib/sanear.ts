@@ -28,6 +28,8 @@ DOMPurify.addHook('afterSanitizeAttributes', (nodo) => {
     const v = nodo.getAttribute(attr);
     if (v && v.startsWith('/')) nodo.setAttribute(attr, `https://cima.aemps.es${v}`);
   }
+  // Los enlaces internos del documento original (#…) no llevan a ningún sitio en la app.
+  if (nodo.tagName === 'A' && nodo.getAttribute('href')?.startsWith('#')) nodo.removeAttribute('href');
   if (nodo.tagName === 'A') {
     nodo.setAttribute('target', '_blank');
     nodo.setAttribute('rel', 'noreferrer');
