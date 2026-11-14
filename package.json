@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/three": "^0.181.0",
     "dompurify": "^3.4.17",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-router-dom": "^7.18.5"
+    "react-router-dom": "^7.18.5",
+    "three": "^0.181.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

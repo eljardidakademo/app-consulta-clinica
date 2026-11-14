@@ -30,7 +30,13 @@ Se instala como una app desde el navegador (PWA), no necesita servidor propio y 
   avisa: *Búsqueda textual en fichas técnicas. La ausencia de resultados NO garantiza ausencia de
   interacción.* No usa bases de interacciones externas (ninguna gratuita tiene licencia clara).
 - Modo claro, oscuro o automático. Página «Fuentes y aviso legal» (botón ⓘ).
-- Anatomía e Imagen: vacíos de momento (fases 3 y 5).
+- **Anatomía 3D** (Fase 3): visor con 8 capas (piel y regiones, músculos, articulaciones, huesos,
+  corazón y vasos, linfático, nervioso y sentidos, vísceras), cada una con su opacidad. Se gira con un
+  dedo y se amplía o desplaza con dos. Al tocar una estructura sale su ficha (nombre en castellano y
+  latín según TA2, lado y sistema) con botones para enfocar, aislar u ocultar. Buscador por nombre.
+  Modelos de Z-Anatomy (CC BY-SA 4.0). Las descripciones (origen, inserción…) aún no están: la ficha
+  dice «Información no disponible en la fuente».
+- Imagen: vacío de momento (fase 5).
 
 ## 2. Regla principal: cero invenciones
 
@@ -107,6 +113,16 @@ Vite, TypeScript, vite-plugin-pwa (Workbox) y DOMPurify.
 - `medicamentos` busca con `nombre=`, `practiv1=` y `cn=`; `medicamento?nregistro=` da el detalle, con
   datos clínicos estructurados por especie. También existe `psuministro`.
 - No hay `docSegmentado` (404) ni `notas`. La tabla maestra 7 es la de especies, no la de ATC.
+
+### Notas técnicas sobre Anatomía
+
+- Los modelos están en `public/anatomia/` (un GLB por sistema, unos 22 MB en total) y
+  `estructuras.json` (nombres). Se generaron con Blender (módulo `bpy`) a partir de `Startup.blend`
+  de Z-Anatomy: objetos visibles de cada colección, simplificados con el modificador Decimate y
+  exportados sin materiales ni normales (las normales se calculan en el móvil).
+- El 93 % de las estructuras tiene nombre en castellano en TA2.csv; el resto muestra el nombre del modelo.
+- El visor (three.js) se descarga aparte, solo al abrir Anatomía. Los modelos se guardan en caché la
+  primera vez que se abren.
 
 ### Estructura
 
