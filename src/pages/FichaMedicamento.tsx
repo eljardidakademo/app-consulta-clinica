@@ -7,6 +7,7 @@ import {
   type MedicamentoDetalle, type NotaSeguridad,
 } from '../lib/cima';
 import Mazo, { type Apartado } from '../components/Mazo';
+import { alternarFavorito, anadirHistorial, useGuardados } from '../lib/guardado';
 
 // Apartados de la ficha técnica que se muestran como tarjetas, con su numeración oficial.
 // "tono" solo cambia el color de la tarjeta para reconocerla de un vistazo.
@@ -60,6 +61,7 @@ export default function FichaMedicamento() {
         if (!vivo) return;
         setMed({ estado: 'ok', datos: m });
         setNotas(n);
+        if (m) anadirHistorial({ nregistro: m.nregistro, nombre: m.nombre, pactivos: m.pactivos });
         if (navigator.onLine) {
           const ahora = new Date();
           guardarFechaConsulta(nregistro, ahora);
@@ -116,6 +118,7 @@ function Contenido({ m, notas, version, consultado, actualizar }: {
   const conSuministro = (m.presentaciones ?? []).filter((p) => p.psum && p.detalleProblemaSuministro);
   const [documento, setDocumento] = useState<'ft' | 'prospecto'>('ft');
   const [apartadosProspecto, setApartadosProspecto] = useState<Apartado[] | null>(null);
+  const esFavorito = useGuardados('favoritos').some((f) => f.nregistro === m.nregistro);
 
   // Índice oficial del prospecto (cada punto será una tarjeta).
   useEffect(() => {
@@ -143,6 +146,16 @@ function Contenido({ m, notas, version, consultado, actualizar }: {
           <span className="ficha-hero-sello">Uso humano</span>
           Nº registro {m.nregistro}
         </p>
+        <button
+          type="button"
+          className={`boton-favorito ${esFavorito ? 'activo' : ''}`}
+          onClick={() => alternarFavorito({ nregistro: m.nregistro, nombre: m.nombre, pactivos: m.pactivos })}
+          aria-pressed={esFavorito}
+          aria-label={esFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          title={esFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+        >
+          {esFavorito ? '★' : '☆'}
+        </button>
         <h1 className="ficha-nombre">{m.nombre}</h1>
         {m.pactivos && <p className="ficha-pactivos">{m.pactivos}</p>}
         <p className="ficha-lab">{m.labtitular}</p>
