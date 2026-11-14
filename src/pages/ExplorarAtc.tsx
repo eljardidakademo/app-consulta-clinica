@@ -19,9 +19,15 @@ export default function ExplorarAtc() {
   const [atc, setAtc] = useState<GrupoAtc[] | null>(null);
   const [error, setError] = useState(false);
   const [verMeds, setVerMeds] = useState(false);
+  const [consultado, setConsultado] = useState<Date | null>(null);
 
   useEffect(() => {
-    obtenerAtc().then(setAtc).catch(() => setError(true));
+    obtenerAtc()
+      .then((l) => {
+        setAtc(l);
+        setConsultado((c) => c ?? new Date());
+      })
+      .catch(() => setError(true));
   }, []);
   useEffect(() => setVerMeds(nivelAtc(codigo) === 5), [codigo]);
 
@@ -83,7 +89,9 @@ export default function ExplorarAtc() {
       )}
       {verMeds && <MedicamentosDelGrupo codigo={codigo} />}
 
-      <p className="fuente">Fuente: clasificación ATC publicada en CIMA (AEMPS).</p>
+      <p className="fuente">
+        Fuente: clasificación ATC publicada en CIMA (AEMPS).{consultado && ` Consultado el ${formatearFecha(consultado)}.`}
+      </p>
     </div>
   );
 }

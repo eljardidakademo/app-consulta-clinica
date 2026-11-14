@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import BuscadorMedicamentos from '../components/BuscadorMedicamentos';
-import { fechaCorta, notasRecientes, problemasSuministro, type NotaSeguridad } from '../lib/cima';
+import { fechaCorta, formatearFecha, notasRecientes, problemasSuministro, type NotaSeguridad } from '../lib/cima';
 import { borrarHistorial, useGuardados, type MedGuardado } from '../lib/guardado';
 
 const DIAS_NOTAS = 90;
@@ -85,9 +85,18 @@ function ResumenSuministro() {
 
 function NotasSeguridad() {
   const [notas, setNotas] = useState<NotaSeguridad[] | null>(null);
+  const [consultado, setConsultado] = useState<Date | null>(null);
+  const [error, setError] = useState(false);
   useEffect(() => {
-    notasRecientes(DIAS_NOTAS).then(setNotas).catch(() => setNotas([]));
+    notasRecientes(DIAS_NOTAS)
+      .then((n) => {
+        setNotas(n);
+        setConsultado(new Date());
+      })
+      .catch(() => setError(true));
   }, []);
+  // Si CIMA no responde, se dice claramente: no es lo mismo que "no hay notas".
+  if (error) return <p className="aviso aviso-error">No se han podido consultar las notas de seguridad de la AEMPS.</p>;
   if (!notas) return null;
   return (
     <section className="seccion-ficha">
@@ -107,7 +116,9 @@ function NotasSeguridad() {
           ))}
         </div>
       )}
-      <p className="fuente">Fuente: CIMA (AEMPS), notas publicadas en los últimos {DIAS_NOTAS} días.</p>
+      <p className="fuente">
+        Fuente: CIMA (AEMPS), notas publicadas en los últimos {DIAS_NOTAS} días.{consultado && ` Consultado el ${formatearFecha(consultado)}.`}
+      </p>
     </section>
   );
 }
