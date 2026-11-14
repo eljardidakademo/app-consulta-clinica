@@ -22,6 +22,7 @@
   --buscar: #14302b;
 
   --humano: #1f7a5a;
+  --vet: #7044b8;
   --alerta: #b4570a;
   --error: #b42318;
 
@@ -48,6 +49,7 @@
     --imagen: #8ea6ff;
     --buscar: #cfe6dc;
     --humano: #4cc49a;
+    --vet: #c4a3f5;
     --alerta: #f0a35a;
     --error: #ff8a80;
     --sombra: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
@@ -67,6 +69,7 @@
   --imagen: #8ea6ff;
   --buscar: #cfe6dc;
   --humano: #4cc49a;
+  --vet: #c4a3f5;
   --alerta: #f0a35a;
   --error: #ff8a80;
   --sombra: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
@@ -189,6 +192,7 @@ h1 {
   background: var(--superficie-2); color: var(--tinta-suave);
 }
 .chip-humano { background: color-mix(in srgb, var(--humano) 16%, transparent); color: var(--humano); }
+.chip-vet { background: color-mix(in srgb, var(--vet) 16%, transparent); color: var(--vet); }
 .chip-alerta { background: color-mix(in srgb, var(--alerta) 16%, transparent); color: var(--alerta); }
 .chip-apagado { text-decoration: line-through; }
 
@@ -500,3 +504,70 @@ h1 {
 .contador-modulo { background: var(--modulo); }
 .tarjeta-suministro { border-left-color: var(--precaucion); }
 .tarjeta-suministro .nota { font-size: 0.82rem; margin-top: 4px; }
+
+/* ---------- Uso veterinario (CIMAVet) ---------- */
+[data-modulo='farmacia'][data-uso='vet'] { --modulo: var(--vet); --hero-1: #2b1a4a; --hero-2: #6a3fb0; }
+.selector-uso { margin-bottom: 12px; }
+.selector-uso .segmento[aria-checked='true'] { color: var(--vet); }
+.selector-uso .segmento:first-child[aria-checked='true'] { color: var(--humano); }
+.tarjeta-med-vet { border-left-color: var(--vet); }
+.tarjeta-med-vet:hover { border-color: var(--vet); }
+.mini-tarjeta-vet { border-top-color: var(--vet); }
+.mini-tarjeta-vet .mini-tarjeta-pa { color: var(--vet); }
+.bloque-vet {
+  --tono: var(--modulo);
+  margin-top: 12px; border-radius: 22px; overflow: hidden;
+  border: 1px solid var(--borde); background: var(--superficie);
+}
+.bloque-vet.tono-peligro { --tono: var(--peligro); }
+.bloque-vet.tono-precaucion { --tono: var(--precaucion); }
+.bloque-vet > summary {
+  display: flex; gap: 12px; align-items: center; padding: 14px 16px; cursor: pointer; list-style: none;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tono) 18%, var(--superficie)), var(--superficie) 75%);
+}
+.bloque-vet > summary::-webkit-details-marker { display: none; }
+.bloque-vet > summary .tarjeta-apartado-icono { width: 40px; height: 40px; border-radius: 13px; }
+.bloque-vet-titulo { flex: 1; font-weight: 700; }
+.bloque-vet-cuerpo { padding: 4px 16px 14px; }
+.bloque-vet-cuerpo h4 { margin: 12px 0 4px; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tono); }
+.bloque-vet-cuerpo ul { margin: 0; padding-left: 18px; }
+.bloque-vet-cuerpo li { margin: 3px 0; }
+
+/* ---------- Cruce de fichas ---------- */
+.fila-cruce { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 14px; }
+.boton-cruce {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 42px; padding: 0 16px;
+  border-radius: 999px; border: 1px solid var(--modulo); background: transparent; color: var(--modulo);
+  font-weight: 700; font-size: 0.9rem; cursor: pointer; text-decoration: none;
+}
+.boton-cruce.activo { background: var(--modulo); color: var(--superficie); }
+.boton-cruce:disabled { opacity: 0.5; cursor: not-allowed; }
+.acceso-cruce { background: linear-gradient(150deg, #3d2a10, #8a5a12); }
+.aviso-cruce {
+  padding: 12px 14px; border-radius: var(--radio-sm); font-weight: 600;
+  background: color-mix(in srgb, var(--precaucion) 14%, var(--superficie));
+  border: 1px solid color-mix(in srgb, var(--precaucion) 45%, var(--borde));
+}
+.lista-cruce { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lista-cruce li {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px;
+  background: var(--superficie); border: 1px solid var(--borde);
+}
+.lista-cruce a { flex: 1; font-weight: 650; font-size: 0.9rem; line-height: 1.3; text-decoration: none; }
+.boton-quitar {
+  flex: none; width: 36px; height: 36px; border-radius: 50%; border: 0;
+  background: var(--superficie-2); color: var(--tinta-suave); font-size: 1.1rem; cursor: pointer;
+}
+.par-cruce {
+  margin-top: 14px; padding: 14px 16px; border-radius: 20px;
+  background: var(--superficie); border: 1px solid var(--borde);
+}
+.par-cruce.con-resultados { border-left: 5px solid var(--precaucion); }
+.par-cruce h3 { margin: 0 0 6px; font-size: 0.98rem; line-height: 1.35; }
+.terminos { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+.fragmento {
+  margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; font-size: 0.92rem; line-height: 1.5;
+  background: var(--superficie-2);
+}
+.fragmento-etiqueta { display: block; margin-bottom: 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tinta-suave); }
+mark { background: color-mix(in srgb, var(--acento) 55%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }

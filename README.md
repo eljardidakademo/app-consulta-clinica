@@ -7,7 +7,7 @@ Se instala como una app desde el navegador (PWA), no necesita servidor propio y 
 
 ---
 
-## 1. Qué hace ahora (Fase 1: Farmacia de uso humano)
+## 1. Qué hace ahora (Fases 1 y 2: Farmacia)
 
 - **Buscador de medicamentos** por nombre, principio activo o código nacional, conectado en tiempo real a CIMA (AEMPS).
 - **Ficha del medicamento** dentro de la app:
@@ -20,6 +20,15 @@ Se instala como una app desde el navegador (PWA), no necesita servidor propio y 
 - **Problemas de suministro** activos (lista oficial completa, con filtro).
 - **Notas de seguridad** de la AEMPS de los últimos 90 días.
 - **Favoritos** (★ en la ficha) e **historial**, guardados solo en el móvil.
+- **Uso veterinario** (Fase 2): selector «Uso humano / Uso veterinario» en Farmacia. Los medicamentos
+  veterinarios salen de CIMAVet (AEMPS), con distintivo morado. CIMAVet no publica la ficha técnica por
+  apartados, así que su ficha muestra los datos estructurados por especie (indicaciones,
+  contraindicaciones, interacciones, reacciones adversas, tiempos de espera) y los PDF oficiales.
+- **Cruce de fichas** (Fase 2): se añaden de 2 a 4 medicamentos con «Añadir al cruce» y la app busca el
+  principio activo y los grupos ATC de cada uno en el apartado 4.5 de la ficha técnica de los demás
+  (o en las interacciones de CIMAVet). Muestra el fragmento oficial con la palabra resaltada. Siempre
+  avisa: *Búsqueda textual en fichas técnicas. La ausencia de resultados NO garantiza ausencia de
+  interacción.* No usa bases de interacciones externas (ninguna gratuita tiene licencia clara).
 - Modo claro, oscuro o automático. Página «Fuentes y aviso legal» (botón ⓘ).
 - Anatomía e Imagen: vacíos de momento (fases 3 y 5).
 
@@ -92,13 +101,22 @@ Vite, TypeScript, vite-plugin-pwa (Workbox) y DOMPurify.
 - `medicamentos?atc=` acepta códigos parciales; `notas` exige `nregistro` o `ndias`.
 - El service worker guarda las respuestas de CIMA con estrategia «primero la red» para verlas sin conexión.
 
+### Notas técnicas sobre CIMAVet (comprobado el 14/11/2026)
+
+- API en `https://cimavet.aemps.es/cimavet/rest/`, con CORS abierto (`Access-Control-Allow-Origin: *`).
+- `medicamentos` busca con `nombre=`, `practiv1=` y `cn=`; `medicamento?nregistro=` da el detalle, con
+  datos clínicos estructurados por especie. También existe `psuministro`.
+- No hay `docSegmentado` (404) ni `notas`. La tabla maestra 7 es la de especies, no la de ATC.
+
 ### Estructura
 
 ```
 src/
   lib/cima.ts          acceso a la API de CIMA
+  lib/cimavet.ts       acceso a la API de CIMAVet (veterinaria)
+  lib/cruce.ts         cruce de fichas (búsqueda textual en el apartado 4.5)
   lib/sanear.ts        limpieza del HTML oficial (DOMPurify)
-  lib/guardado.ts      favoritos e historial (localStorage)
+  lib/guardado.ts      favoritos, historial y cruce (localStorage)
   lib/tema.ts          modo claro/oscuro
   components/          cabecera, navegación, buscador, mazo de tarjetas, iconos
   pages/               Farmacia, ficha, ATC, suministro, Anatomía, Imagen, Buscar, fuentes
