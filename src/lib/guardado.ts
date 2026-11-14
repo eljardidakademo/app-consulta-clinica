@@ -6,10 +6,12 @@ export interface MedGuardado {
   nregistro: string;
   nombre: string;
   pactivos?: string;
+  /** true si es un medicamento veterinario (CIMAVet). */
+  vet?: boolean;
   fecha: string; // ISO: cuándo se guardó o se consultó
 }
 
-const CLAVES = { favoritos: 'farmacia-favoritos', historial: 'farmacia-historial' } as const;
+const CLAVES = { favoritos: 'farmacia-favoritos', historial: 'farmacia-historial', cruce: 'farmacia-cruce' } as const;
 type Lista = keyof typeof CLAVES;
 const MAX_HISTORIAL = 30;
 const EVENTO = 'guardado-cambiado';
@@ -41,6 +43,25 @@ export function alternarFavorito(m: Omit<MedGuardado, 'fecha'>) {
   const actual = leer('favoritos');
   const existe = actual.some((x) => x.nregistro === m.nregistro);
   escribir('favoritos', existe ? actual.filter((x) => x.nregistro !== m.nregistro) : [{ ...m, fecha: new Date().toISOString() }, ...actual]);
+}
+
+// Medicamentos elegidos para el cruce de fichas (máximo MAX_CRUCE).
+export const MAX_CRUCE = 4;
+export function alternarCruce(m: Omit<MedGuardado, 'fecha'>) {
+  const actual = leer('cruce');
+  if (actual.some((x) => x.nregistro === m.nregistro)) {
+    escribir('cruce', actual.filter((x) => x.nregistro !== m.nregistro));
+  } else if (actual.length < MAX_CRUCE) {
+    escribir('cruce', [...actual, { ...m, fecha: new Date().toISOString() }]);
+  }
+}
+export function vaciarCruce() {
+  escribir('cruce', []);
+}
+
+/** Dirección de la ficha dentro de la app (uso humano o veterinario). */
+export function rutaFicha(m: { nregistro: string; vet?: boolean }): string {
+  return `/farmacia/${m.vet ? 'vet' : 'medicamento'}/${encodeURIComponent(m.nregistro)}`;
 }
 
 /** Lista guardada que se actualiza sola cuando cambia (también desde otra pestaña). */

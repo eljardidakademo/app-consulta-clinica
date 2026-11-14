@@ -13,8 +13,8 @@ export default function Acerca() {
         No guarda datos de pacientes y no usa analíticas ni rastreadores.
       </p>
       <p>
-        Los favoritos y el historial se guardan solo en este dispositivo y no se envían a ningún sitio.
-        Las consultas a CIMA se guardan en la memoria del navegador para poder verlas sin conexión,
+        Los favoritos, el historial y los medicamentos elegidos para el cruce se guardan solo en este dispositivo y no se envían a ningún sitio.
+        Las consultas a CIMA y CIMAVet se guardan en la memoria del navegador para poder verlas sin conexión,
         siempre con su fecha de consulta.
       </p>
 
@@ -25,6 +25,18 @@ export default function Acerca() {
           <strong>Medicamentos de uso humano</strong> (búsqueda, datos de autorización, ficha técnica y prospecto por
           apartados, documentos PDF): CIMA, Agencia Española de Medicamentos y Productos Sanitarios (AEMPS).{' '}
           <a href="https://cima.aemps.es" target="_blank" rel="noreferrer">cima.aemps.es</a>
+        </li>
+        <li>
+          <strong>Medicamentos de uso veterinario</strong> (búsqueda, datos de autorización, datos clínicos
+          estructurados por especie y documentos PDF): CIMAVet, AEMPS.{' '}
+          <a href="https://cimavet.aemps.es" target="_blank" rel="noreferrer">cimavet.aemps.es</a>. CIMAVet no
+          publica la ficha técnica por apartados.
+        </li>
+        <li>
+          <strong>Cruce de fichas</strong>: búsqueda textual, hecha en el propio dispositivo, del principio activo y
+          los grupos ATC de un medicamento en el apartado 4.5 de la ficha técnica de otro (CIMA) o en las
+          interacciones publicadas por CIMAVet. No usa ninguna base de datos de interacciones externa. La ausencia
+          de resultados no garantiza ausencia de interacción.
         </li>
         <li>
           <strong>Clasificación ATC</strong>: códigos y nombres tal como los publica CIMA (AEMPS).

@@ -45,6 +45,17 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
+          {
+            // CIMAVet (medicamentos veterinarios): misma estrategia que CIMA.
+            urlPattern: /^https:\/\/cimavet\.aemps\.es\/cimavet\/rest\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'cimavet-api',
+              networkTimeoutSeconds: 8,
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
         ],
       },
     }),

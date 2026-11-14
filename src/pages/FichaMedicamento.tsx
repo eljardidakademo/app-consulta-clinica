@@ -8,6 +8,7 @@ import {
 } from '../lib/cima';
 import Mazo, { type Apartado } from '../components/Mazo';
 import { alternarFavorito, anadirHistorial, useGuardados } from '../lib/guardado';
+import BotonCruce from '../components/BotonCruce';
 
 // Apartados de la ficha técnica que se muestran como tarjetas, con su numeración oficial.
 // "tono" solo cambia el color de la tarjeta para reconocerla de un vistazo.
@@ -170,6 +171,8 @@ function Contenido({ m, notas, version, consultado, actualizar }: {
           {m.ema && <span className="chip chip-claro">Autorización centralizada (EMA)</span>}
         </div>
       </header>
+
+      <BotonCruce nregistro={m.nregistro} nombre={m.nombre} pactivos={m.pactivos} />
 
       {/* ---------- Datos clave: tarjetas pequeñas que se deslizan en horizontal ---------- */}
       {datosRapidos.length > 0 && (

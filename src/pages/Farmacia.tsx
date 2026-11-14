@@ -1,23 +1,25 @@
-// Módulo 1: Farmacia (uso humano). Portada con buscador, accesos rápidos,
-// favoritos, historial y alertas de la AEMPS.
+// Módulo 1: Farmacia. Portada con selector de uso humano (CIMA) o veterinario (CIMAVet),
+// buscador, accesos rápidos, favoritos, historial y alertas de la AEMPS.
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import BuscadorMedicamentos from '../components/BuscadorMedicamentos';
+import BuscadorMedicamentos, { usoDeParams } from '../components/BuscadorMedicamentos';
 import { fechaCorta, formatearFecha, notasRecientes, problemasSuministro, type NotaSeguridad } from '../lib/cima';
-import { borrarHistorial, useGuardados, type MedGuardado } from '../lib/guardado';
+import { borrarHistorial, rutaFicha, useGuardados, type MedGuardado } from '../lib/guardado';
 
 const DIAS_NOTAS = 90;
 
 export default function Farmacia() {
   const [params] = useSearchParams();
   const buscando = (params.get('q') ?? '').trim().length >= 3;
+  const vet = usoDeParams(params) === 'vet';
   const favoritos = useGuardados('favoritos');
   const historial = useGuardados('historial');
+  const cruce = useGuardados('cruce');
 
   return (
-    <div className="pagina" data-modulo="farmacia">
+    <div className="pagina" data-modulo="farmacia" data-uso={vet ? 'vet' : 'humano'}>
       <header className="pagina-cabecera">
-        <p className="pagina-antetitulo">Módulo 1 · Medicamentos de uso humano</p>
+        <p className="pagina-antetitulo">Módulo 1 · Medicamentos de uso {vet ? 'veterinario' : 'humano'}</p>
         <h1>Farmacia</h1>
       </header>
 
@@ -26,11 +28,19 @@ export default function Farmacia() {
       {!buscando && (
         <>
           <div className="accesos">
-            <Link to="/farmacia/atc" className="acceso">
-              <span className="acceso-titulo">Explorar por grupo ATC</span>
-              <span className="acceso-texto">De grupo anatómico a principio activo</span>
+            {!vet && (
+              <Link to="/farmacia/atc" className="acceso">
+                <span className="acceso-titulo">Explorar por grupo ATC</span>
+                <span className="acceso-texto">De grupo anatómico a principio activo</span>
+              </Link>
+            )}
+            {!vet && <ResumenSuministro />}
+            <Link to="/farmacia/cruce" className="acceso acceso-cruce">
+              <span className="acceso-titulo">Cruce de fichas</span>
+              <span className="acceso-texto">
+                {cruce.length ? `${cruce.length} medicamento${cruce.length === 1 ? '' : 's'} elegido${cruce.length === 1 ? '' : 's'}` : 'Busca un medicamento en el apartado de interacciones de otro'}
+              </span>
             </Link>
-            <ResumenSuministro />
           </div>
 
           {favoritos.length > 0 && (
@@ -54,7 +64,7 @@ export default function Farmacia() {
             </section>
           )}
 
-          <NotasSeguridad />
+          {!vet && <NotasSeguridad />}
         </>
       )}
     </div>
@@ -63,7 +73,8 @@ export default function Farmacia() {
 
 function MiniTarjeta({ m }: { m: MedGuardado }) {
   return (
-    <Link to={`/farmacia/medicamento/${m.nregistro}`} className="mini-tarjeta">
+    <Link to={rutaFicha(m)} className={`mini-tarjeta ${m.vet ? 'mini-tarjeta-vet' : ''}`}>
+      {m.vet && <span className="chip chip-vet">Uso veterinario</span>}
       <span className="mini-tarjeta-nombre">{m.nombre}</span>
       {m.pactivos && <span className="mini-tarjeta-pa">{m.pactivos}</span>}
     </Link>
