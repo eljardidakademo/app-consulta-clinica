@@ -163,3 +163,73 @@ export function urlFichaCima(nregistro: string): string {
 export function formatearFecha(fecha: Date): string {
   return fecha.toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
 }
+
+// ---------------------------------------------------------------------------
+// Clasificación ATC, alertas generales y búsquedas auxiliares
+// ---------------------------------------------------------------------------
+
+export interface GrupoAtc {
+  codigo: string;
+  nombre: string;
+}
+
+let atcEnMemoria: Promise<GrupoAtc[]> | null = null;
+
+/**
+ * Lista completa de códigos ATC de CIMA (tabla maestra 7, unos 7.300 códigos).
+ * Nota: CIMA solo devuelve esta tabla si la consulta lleva algún filtro; con "codigo=A"
+ * devuelve la lista entera (comprobado el 14/11/2026). Se pide una vez por sesión.
+ */
+export function obtenerAtc(): Promise<GrupoAtc[]> {
+  if (!atcEnMemoria) {
+    atcEnMemoria = pedirJson<{ resultados?: GrupoAtc[] }>('maestras?maestra=7&codigo=A&pagesize=10000', {})
+      .then((d) => (d.resultados ?? []).filter((g) => g.codigo && !g.codigo.startsWith('Z')))
+      .catch((e) => {
+        atcEnMemoria = null;
+        throw e;
+      });
+  }
+  return atcEnMemoria;
+}
+
+/** Nivel ATC según la longitud del código: A=1, A01=2, A01A=3, A01AA=4, A01AA01=5. */
+export function nivelAtc(codigo: string): number {
+  return ({ 1: 1, 3: 2, 4: 3, 5: 4, 7: 5 } as Record<number, number>)[codigo.length] ?? 0;
+}
+
+/** Medicamentos de un grupo ATC (sirve cualquier nivel: "N02BE" o "N02BE01"). */
+export async function medicamentosPorAtc(codigo: string, pagina = 1) {
+  const d = await pedirJson<Omit<ResultadoBusqueda, 'consultadoEl'> | null>(
+    `medicamentos?atc=${encodeURIComponent(codigo)}&pagesize=50&pagina=${pagina}`,
+    null,
+  );
+  return { totalFilas: d?.totalFilas ?? 0, pagina, tamanioPagina: 50, resultados: d?.resultados ?? [], consultadoEl: new Date() } as ResultadoBusqueda;
+}
+
+/** Notas de seguridad publicadas por la AEMPS en los últimos "dias" días. */
+export async function notasRecientes(dias: number): Promise<NotaSeguridad[]> {
+  const d = await pedirJson<NotaSeguridad[] | { resultados?: NotaSeguridad[] }>(`notas?ndias=${dias}`, []);
+  const lista = Array.isArray(d) ? d : d.resultados ?? [];
+  return [...lista].sort((a, b) => (b.fecha ?? 0) - (a.fecha ?? 0));
+}
+
+export interface ProblemaSuministro {
+  cn: string;
+  nombre: string;
+  fini?: number;
+  ffin?: number;
+  activo?: boolean;
+  observ?: string;
+}
+
+/** Problemas de suministro activos publicados por la AEMPS (lista completa). */
+export async function problemasSuministro(): Promise<ProblemaSuministro[]> {
+  const d = await pedirJson<{ resultados?: ProblemaSuministro[] }>('psuministro?pagesize=2000', {});
+  return [...(d.resultados ?? [])].sort((a, b) => (b.fini ?? 0) - (a.fini ?? 0));
+}
+
+/** Número de registro de un medicamento a partir de su código nacional (CN). */
+export async function nregistroPorCn(cn: string): Promise<string | null> {
+  const d = await pedirJson<{ resultados?: MedicamentoCima[] }>(`medicamentos?cn=${encodeURIComponent(cn)}`, {});
+  return d.resultados?.[0]?.nregistro ?? null;
+}

@@ -5,13 +5,16 @@ Se puede instalar como una app (PWA) desde el navegador y funciona sin servidor 
 
 **Dirección de la app:** https://eljardidakademo.github.io/app-consulta-clinica/
 
-## Estado actual (Fase 1, paso 2)
+## Estado actual (Fase 1)
 
 - Navegación inferior con los tres módulos (Farmacia, Anatomía, Imagen) y el buscador.
 - Farmacia: buscador de medicamentos de uso humano conectado en tiempo real a CIMA (AEMPS),
   por nombre, principio activo o código nacional. Al tocar un resultado se abre su ficha dentro de la app:
   datos de autorización, alertas de seguridad y suministro, secciones 4.1 a 5.2 de la ficha técnica
   (texto oficial, plegable), prospecto y enlaces a los PDF oficiales. Al volver, la búsqueda sigue ahí.
+- Farmacia: navegación por la clasificación ATC hasta los medicamentos de cada grupo, lista de problemas de
+  suministro activos, notas de seguridad recientes de la AEMPS, favoritos (★ en la ficha) e historial de consultas.
+  Favoritos e historial se guardan solo en el móvil.
 - Anatomía e Imagen: vacíos por ahora.
 - Modo claro, oscuro o automático (botón de la cabecera).
 - Página de fuentes y aviso legal (botón ⓘ).
