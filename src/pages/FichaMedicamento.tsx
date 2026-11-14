@@ -166,6 +166,8 @@ function Contenido({ m, notas, version, consultado, actualizar }: {
           {m.conduc && <span className="chip chip-claro">Afecta a la conducción</span>}
           {m.huerfano && <span className="chip chip-claro">Huérfano</span>}
           {m.biosimilar && <span className="chip chip-claro">Biosimilar</span>}
+          {/* Dato de CIMA: autorizado por procedimiento centralizado europeo (EMA) */}
+          {m.ema && <span className="chip chip-claro">Autorización centralizada (EMA)</span>}
         </div>
       </header>
 
