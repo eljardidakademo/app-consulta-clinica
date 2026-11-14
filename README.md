@@ -1,49 +1,69 @@
 # Consulta clínica · Farmacia, Anatomía e Imagen
 
-Aplicación web de consulta rápida para uso personal, pensada para el móvil.
-Se puede instalar como una app (PWA) desde el navegador y funciona sin servidor propio.
+Aplicación web de consulta rápida para uso personal (2 usuarios), pensada para el móvil.
+Se instala como una app desde el navegador (PWA), no necesita servidor propio y no cuesta nada mantenerla.
 
 **Dirección de la app:** https://eljardidakademo.github.io/app-consulta-clinica/
 
-## Estado actual (Fase 1)
+---
 
-- Navegación inferior con los tres módulos (Farmacia, Anatomía, Imagen) y el buscador.
-- Farmacia: buscador de medicamentos de uso humano conectado en tiempo real a CIMA (AEMPS),
-  por nombre, principio activo o código nacional. Al tocar un resultado se abre su ficha dentro de la app:
-  datos de autorización, alertas de seguridad y suministro, secciones 4.1 a 5.2 de la ficha técnica
-  (texto oficial, plegable), prospecto y enlaces a los PDF oficiales. Al volver, la búsqueda sigue ahí.
-- Farmacia: navegación por la clasificación ATC hasta los medicamentos de cada grupo, lista de problemas de
-  suministro activos, notas de seguridad recientes de la AEMPS, favoritos (★ en la ficha) e historial de consultas.
-  Favoritos e historial se guardan solo en el móvil.
-- Anatomía e Imagen: vacíos por ahora.
-- Modo claro, oscuro o automático (botón de la cabecera).
-- Página de fuentes y aviso legal (botón ⓘ).
+## 1. Qué hace ahora (Fase 1: Farmacia de uso humano)
 
-El diseño visual actual es provisional; la identidad definitiva se elegirá más adelante.
+- **Buscador de medicamentos** por nombre, principio activo o código nacional, conectado en tiempo real a CIMA (AEMPS).
+- **Ficha del medicamento** dentro de la app:
+  - cabecera con nombre, principio activo, laboratorio y datos clave;
+  - alertas de la AEMPS (notas de seguridad y problemas de suministro);
+  - apartados 4.1 a 5.2 de la ficha técnica en tarjetas que se deslizan, con el **texto oficial sin modificar**;
+  - prospecto por puntos, enlaces a los PDF oficiales y a CIMA;
+  - fuente y fecha de consulta, con botón «Actualizar».
+- **Árbol ATC**: del grupo anatómico al principio activo y a sus medicamentos.
+- **Problemas de suministro** activos (lista oficial completa, con filtro).
+- **Notas de seguridad** de la AEMPS de los últimos 90 días.
+- **Favoritos** (★ en la ficha) e **historial**, guardados solo en el móvil.
+- Modo claro, oscuro o automático. Página «Fuentes y aviso legal» (botón ⓘ).
+- Anatomía e Imagen: vacíos de momento (fases 3 y 5).
 
-## Regla principal
+## 2. Regla principal: cero invenciones
 
-Ningún dato clínico se inventa ni se escribe a mano: los datos de medicamentos se leen
-directamente de CIMA y siempre se muestra la fuente y la fecha de consulta.
+Ningún dato clínico se escribe a mano ni lo genera una IA. Todo se lee de CIMA en el momento y se muestra
+con su fuente y su fecha. Si CIMA no tiene un dato, la app muestra «Información no disponible en la fuente».
 
-## Cómo instalarla en el móvil
+## 3. Instalar la app en el móvil
 
-- **Android (Chrome):** abre la dirección de la app, menú ⋮ → «Instalar aplicación» o «Añadir a pantalla de inicio».
-- **iPhone (Safari):** abre la dirección, botón Compartir → «Añadir a pantalla de inicio».
+- **Android (Chrome):** abre la dirección de la app → menú ⋮ → «Instalar aplicación».
+- **iPhone (Safari):** abre la dirección → botón Compartir → «Añadir a pantalla de inicio».
 
-## Cómo se publica (sin tocar código)
+Después ábrela siempre desde el icono.
 
-La app se publica sola en GitHub Pages cada vez que se actualiza la rama `main`.
+## 4. Cómo se actualiza la app (sin programar)
 
-**Configuración inicial (una sola vez):**
+Cada cambio llega como una **propuesta de cambios** (pull request, «PR») en GitHub.
 
-1. En GitHub, abre el repositorio y entra en **Settings → Pages**.
-2. En **Build and deployment → Source**, elige **GitHub Actions**.
-3. Listo. A partir de ahí, cada cambio aceptado en `main` publica la app en uno o dos minutos.
+1. Abre el enlace de la PR que te pase Claude (o la pestaña **Pull requests** del repositorio).
+2. Espera a que aparezca la marca verde ✓ («All checks have passed»): significa que la app compila bien.
+3. Pulsa **Merge pull request** y luego **Confirm merge**.
+4. En uno o dos minutos la nueva versión está publicada. En el móvil, cierra la app y vuelve a abrirla.
 
-**Para ver si una publicación ha ido bien:** pestaña **Actions** del repositorio.
-Un círculo verde significa que la app está actualizada; uno rojo, que algo falló y la versión anterior sigue en línea.
-También se puede relanzar a mano: Actions → «Publicar en GitHub Pages» → **Run workflow**.
+**Ver si la publicación ha ido bien:** pestaña **Actions** del repositorio, flujo «Publicar en GitHub Pages».
+Verde = publicada. Rojo = algo falló, y la versión anterior sigue funcionando.
+
+**Deshacer un cambio que no os guste:** en la PR ya aceptada, pulsa **Revert**. GitHub crea una PR nueva que
+deshace el cambio; acéptala igual que cualquier otra.
+
+**Volver a publicar a mano** (por ejemplo, si GitHub tuvo un fallo): Actions → «Publicar en GitHub Pages» →
+**Run workflow**.
+
+### Configuración inicial (ya está hecha)
+
+En **Settings → Pages → Build and deployment → Source** debe estar elegido **GitHub Actions**.
+
+## 5. Privacidad
+
+- Sin datos de pacientes, sin registro, sin analíticas ni rastreadores.
+- Favoritos e historial se guardan solo en el dispositivo.
+- La app solo se conecta a `cima.aemps.es` (datos oficiales) y a GitHub Pages (la propia app).
+
+---
 
 ## Para quien programe
 
@@ -52,29 +72,38 @@ Requisitos: Node.js 22.
 ```bash
 npm install      # instala las dependencias
 npm run dev      # arranca la app en local para desarrollo
-npm run build    # genera la versión final en la carpeta dist/
+npm run build    # comprueba los tipos y genera la versión final en dist/
 npm run preview  # sirve la versión final en local
 ```
 
-Tecnologías: React 19, Vite, TypeScript y vite-plugin-pwa. Rutas con `#` (HashRouter) para que
-funcionen en GitHub Pages sin configuración extra.
+Tecnologías: React 19, React Router (HashRouter, para que las rutas funcionen en GitHub Pages),
+Vite, TypeScript, vite-plugin-pwa (Workbox) y DOMPurify.
 
-### Notas técnicas sobre CIMA
+### Notas técnicas sobre CIMA (comprobado el 14/11/2026)
 
-- Comprobado el 14/11/2026: CIMA permite consultas GET desde el navegador (CORS abierto), así que no hace falta proxy.
-- No añadir cabeceras propias a las peticiones: el navegador haría una consulta previa (OPTIONS) que CIMA no acepta.
-- Las búsquedas POST con JSON (por ejemplo `buscarEnFichaTecnica`) sí quedan bloqueadas en el navegador.
-- Las respuestas de CIMA se guardan en caché del dispositivo (estrategia «primero la red») para verlas sin conexión.
+- CORS abierto para GET (`Access-Control-Allow-Origin: *`): no hace falta proxy.
+- Solo se envía la cabecera `Accept: application/json`, que es segura para CORS. Cualquier otra cabecera
+  obliga al navegador a una consulta previa (OPTIONS) que CIMA no acepta. Sin `Accept`, algunos
+  endpoints devuelven texto plano. Las peticiones POST con JSON (`buscarEnFichaTecnica`) quedan bloqueadas.
+- `docSegmentado/contenido` devuelve el apartado pedido y sus subapartados (4.2 → 4.2.1, 4.2.2); a veces
+  el texto solo está en los subapartados.
+- La tabla ATC (`maestras?maestra=7`) devuelve vacío sin filtro; con `codigo=A&pagesize=10000` devuelve
+  los 7.358 códigos.
+- `medicamentos?atc=` acepta códigos parciales; `notas` exige `nregistro` o `ndias`.
+- El service worker guarda las respuestas de CIMA con estrategia «primero la red» para verlas sin conexión.
 
 ### Estructura
 
 ```
 src/
-  lib/cima.ts                    acceso a la API de CIMA
-  lib/tema.ts                    modo claro/oscuro
-  components/                    cabecera, navegación, buscador, iconos
-  pages/                         Farmacia, Anatomía, Imagen, Buscar, Fuentes y aviso legal
-  styles.css                     estilos (colores en variables, fáciles de cambiar)
-.github/workflows/deploy.yml     publicación automática en GitHub Pages
-.github/workflows/comprobar.yml  comprueba que compila en cada propuesta de cambio
+  lib/cima.ts          acceso a la API de CIMA
+  lib/sanear.ts        limpieza del HTML oficial (DOMPurify)
+  lib/guardado.ts      favoritos e historial (localStorage)
+  lib/tema.ts          modo claro/oscuro
+  components/          cabecera, navegación, buscador, mazo de tarjetas, iconos
+  pages/               Farmacia, ficha, ATC, suministro, Anatomía, Imagen, Buscar, fuentes
+  styles.css           estilos (colores en variables, fáciles de cambiar)
+.github/workflows/
+  deploy.yml           publicación automática en GitHub Pages al actualizar main
+  comprobar.yml        comprueba que compila en cada PR
 ```
