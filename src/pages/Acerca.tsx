@@ -51,13 +51,44 @@ export default function Acerca() {
           <a href="https://www.ema.europa.eu/en/medicines" target="_blank" rel="noreferrer">ema.europa.eu</a>
         </li>
       </ul>
-      <p className="nota">Las fuentes de Anatomía e Imagen se añadirán aquí cuando se incorporen sus contenidos.</p>
+
+      <h2 className="seccion-titulo">Anatomía: modelos 3D y nombres</h2>
+      <ul className="lista-fuentes">
+        <li>
+          <strong>Z-Anatomy</strong>, el atlas 3D libre de anatomía (Lluís Vinent y colaboradores). Licencia{' '}
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>.{' '}
+          <a href="https://github.com/Z-Anatomy/Models-of-human-anatomy" target="_blank" rel="noreferrer">Repositorio original</a>.
+          Para la app, el archivo original se ha convertido a un modelo por sistema y se ha simplificado la malla
+          (de 6,8 a 1,6 millones de polígonos); los colores de las capas son propios. Estos modelos derivados se
+          comparten con la misma licencia CC BY-SA 4.0.
+        </li>
+        <li>
+          <strong>BodyParts3D</strong>, © The Database Center for Life Science, licencia CC BY-SA 2.1 Japón. Origen de
+          la mayoría de los modelos de Z-Anatomy.
+        </li>
+        <li>
+          Modelos incluidos en Z-Anatomy con licencias propias: «Cranial Nerves and Foramina», University of Dundee,
+          CAHID (CC BY 4.0); «Anatomy of the Inner Ear», University of Dundee School of Medicine (CC BY-NC-SA 4.0, uso no
+          comercial); «Kidney», Lissie Cowley (CC BY-NC 4.0, uso no comercial); «Brainder» y «White matter»,
+          University of Washington.
+        </li>
+        <li>
+          <strong>Nombres</strong>: tabla TA2.csv incluida en Z-Anatomy, basada en la Terminologia Anatomica, 2.ª
+          edición (FIPAT), con latín y traducción al castellano. La traducción no está validada (borrador).
+        </li>
+        <li>
+          Las descripciones de cada estructura (origen, inserción, inervación…) todavía no están incorporadas: la
+          ficha lo indica como «Información no disponible en la fuente».
+        </li>
+      </ul>
+      <p className="nota">Las fuentes de Imagen se añadirán aquí cuando se incorporen sus contenidos.</p>
 
       <h2 className="seccion-titulo">Créditos del software</h2>
       <ul className="lista-fuentes">
         <li>React (licencia MIT), React Router (MIT), Vite (MIT).</li>
         <li>Workbox, mediante vite-plugin-pwa (MIT), para el funcionamiento sin conexión.</li>
         <li>DOMPurify (Apache 2.0 o MPL 2.0), para limpiar el formato del texto oficial sin cambiar su contenido.</li>
+        <li>three.js (MIT), para el visor 3D.</li>
         <li>Iconos y diseño propios.</li>
       </ul>
     </div>

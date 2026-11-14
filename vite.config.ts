@@ -36,6 +36,16 @@ export default defineConfig({
         // pero siempre se intenta primero la red para tener el dato más reciente.
         runtimeCaching: [
           {
+            // Modelos 3D de Anatomía: se guardan la primera vez que se abren (no cambian a menudo).
+            urlPattern: ({ url }) => url.pathname.includes('/anatomia/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'anatomia-modelos',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
             urlPattern: /^https:\/\/cima\.aemps\.es\/cima\/rest\//,
             handler: 'NetworkFirst',
             options: {

@@ -571,3 +571,47 @@ h1 {
 }
 .fragmento-etiqueta { display: block; margin-bottom: 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tinta-suave); }
 mark { background: color-mix(in srgb, var(--acento) 55%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+/* ---------- Anatomía: visor 3D ---------- */
+.visor-3d {
+  position: relative; height: min(62vh, 560px); margin: 12px -16px 0; overflow: hidden;
+  background: radial-gradient(90% 70% at 50% 35%, color-mix(in srgb, var(--modulo) 10%, var(--superficie)), var(--superficie-2));
+  border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde);
+}
+.visor-3d canvas { display: block; touch-action: none; }
+.visor-boton {
+  position: absolute; top: 10px; right: 10px; z-index: 2; width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--borde); background: var(--superficie); color: var(--tinta); font-size: 1.2rem; cursor: pointer;
+}
+.visor-carga {
+  position: absolute; left: 12px; bottom: 10px; z-index: 2; margin: 0; padding: 6px 12px; border-radius: 999px;
+  background: var(--superficie); border: 1px solid var(--borde); font-size: 0.8rem; font-weight: 600;
+}
+.visor-error { position: absolute; inset: 16px; z-index: 2; height: fit-content; }
+.visor-ayuda { margin-top: 8px; font-size: 0.8rem; }
+.resultados-anatomia {
+  list-style: none; margin: 8px 0 0; padding: 0; max-height: 300px; overflow-y: auto;
+  border: 1px solid var(--borde); border-radius: var(--radio-sm); background: var(--superficie);
+}
+.resultados-anatomia li + li { border-top: 1px solid var(--borde); }
+.resultados-anatomia li.nota { padding: 10px 14px; }
+.resultados-anatomia button {
+  display: grid; gap: 2px; width: 100%; padding: 10px 14px; border: 0; background: none; text-align: left; cursor: pointer; color: inherit;
+}
+.res-nombre { font-weight: 650; }
+.res-detalle { font-size: 0.8rem; color: var(--tinta-suave); }
+.ficha-estructura {
+  margin-top: 14px; padding: 16px; border-radius: 20px; background: var(--superficie);
+  border: 1px solid var(--borde); border-top: 5px solid #ffb020;
+}
+.ficha-estructura h2 { margin: 2px 0 8px; font-size: 1.2rem; }
+.ficha-estructura-sistema { margin: 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--modulo); }
+.lista-capas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.capa { padding: 10px 14px; border-radius: 14px; background: var(--superficie); border: 1px solid var(--borde); }
+.capa.activa { border-color: var(--modulo); }
+.capa-fila { display: flex; align-items: center; gap: 10px; min-height: 32px; cursor: pointer; }
+.capa-fila input { width: 20px; height: 20px; accent-color: var(--modulo); }
+.capa-color { width: 14px; height: 14px; border-radius: 4px; flex: none; }
+.capa-nombre { flex: 1; font-weight: 600; }
+.capa-opacidad { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 0.8rem; color: var(--tinta-suave); }
+.capa-opacidad input { flex: 1; accent-color: var(--modulo); }
